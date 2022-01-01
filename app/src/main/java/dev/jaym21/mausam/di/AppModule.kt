@@ -19,5 +19,5 @@ object AppModule {
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory()
+            .addCallAdapterFactory(RxJav)
 }
