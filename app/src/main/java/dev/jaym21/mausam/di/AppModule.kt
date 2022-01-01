@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.jaym21.mausam.utils.Constants
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
@@ -19,5 +20,6 @@ object AppModule {
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(RxJav)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
 }
