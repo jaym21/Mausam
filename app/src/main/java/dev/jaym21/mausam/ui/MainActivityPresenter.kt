@@ -33,7 +33,7 @@ class MainActivityPresenter @Inject constructor(private val api: WeatherAPI, pri
     }
 
     override fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>> {
-
+        return database.getWeatherDAO().getAllWeather()
     }
 
     override fun onActivityDestroy() {
