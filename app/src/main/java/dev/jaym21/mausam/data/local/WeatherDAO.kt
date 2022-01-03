@@ -10,10 +10,10 @@ import io.reactivex.Flowable
 interface WeatherDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWeather(weatherEntity: WeatherEntity)
+    fun insertWeather(weatherEntity: WeatherEntity)
 
     @Query("DELETE FROM weather_table")
-    suspend fun deleteAllWeather()
+    fun deleteAllWeather()
 
     @Query("SELECT * FROM weather_table")
     fun getAllWeather(): Flowable<List<WeatherEntity>>

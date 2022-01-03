@@ -7,12 +7,11 @@ import androidx.room.PrimaryKey
 data class WeatherEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val all: Int,
-    val lon: Double,
-    val lat: Double,
-    val name: String,
-    val temp: Double,
-    val main: String,
-    val humidity: Int,
-    val speed: Double,
+    val lon: Double?,
+    val lat: Double?,
+    val name: String?,
+    val temp: Double?,
+    val main: String?,
+    val humidity: Int?,
+    val speed: Double?,
 )
