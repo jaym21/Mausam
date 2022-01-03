@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface WeatherAPI {
 
     @GET("weather?")
-    suspend fun getWeatherForCity (
+    fun getWeatherForCity (
         @Query("q")
         cityName: String,
         @Query("units")
@@ -19,7 +19,7 @@ interface WeatherAPI {
     ): Single<CityResponse>
 
     @GET("weather?")
-    suspend fun getWeatherByLatLng (
+    fun getWeatherByLatLng (
         @Query("lat")
         latitude: String,
         @Query("lon")
