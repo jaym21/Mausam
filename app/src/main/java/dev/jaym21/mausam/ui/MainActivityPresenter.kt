@@ -8,9 +8,8 @@ import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.utils.DisposableManager
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class MainActivityPresenter @Inject constructor(private val api: WeatherAPI, private val database: WeatherDatabase): MainActivityContract.Presenter {
+class MainActivityPresenter (private val api: WeatherAPI, private val database: WeatherDatabase): MainActivityContract.Presenter {
 
     @SuppressLint("CheckResult")
     override fun callApiToGetWeather(cityName: String) {
@@ -24,7 +23,6 @@ class MainActivityPresenter @Inject constructor(private val api: WeatherAPI, pri
                     //caching weather data to use in case of no network
                     database.getWeatherDAO().deleteAllWeather()
                     database.getWeatherDAO().insertWeather(weather)
-
                 },
                 { error ->
                     Log.d("TAGYOYO", "callApiToGetWeather: $error")
