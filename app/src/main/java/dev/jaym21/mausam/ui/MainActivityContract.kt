@@ -6,11 +6,13 @@ import io.reactivex.Flowable
 interface MainActivityContract {
 
     interface View {
-        fun invokePresenterToCallApi()
+        fun invokePresenterToCallApiForCurrentWeather()
+        fun invokePresenterToCallApiForHourlyForecast()
     }
 
     interface Presenter {
-        fun callApiToGetWeather(cityName: String)
+        fun callApiToGetCurrentWeather(cityName: String)
+        fun callApiToGetHourlyForecast(latitude: String, longitude: String)
         fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>>
         fun onActivityDestroy()
     }
