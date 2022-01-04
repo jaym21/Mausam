@@ -75,6 +75,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt"
     kapt "com.google.dagger:hilt-compiler:$hilt"
 
+    //datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
     //unit testing
     testImplementation 'junit:junit:4.13.2'
 
