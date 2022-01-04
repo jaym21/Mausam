@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 class MainActivityPresenter (private val api: WeatherAPI, private val database: WeatherDatabase): MainActivityContract.Presenter {
 
     @SuppressLint("CheckResult")
-    override fun callApiToGetWeather(cityName: String) {
+    override fun callApiToGetCurrentWeather(cityName: String) {
         api.getWeatherForCity(cityName)
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -28,6 +28,10 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
                     Log.d("TAGYOYO", "callApiToGetWeather: $error")
                 }
             )
+    }
+
+    override fun callApiToGetHourlyForecast(latitude: String, longitude: String) {
+
     }
 
     override fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>> {

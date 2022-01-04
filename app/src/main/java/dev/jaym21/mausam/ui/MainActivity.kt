@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         //initializing presenter
         presenter = MainActivityPresenter(api, database)
 
-        invokePresenterToCallApi()
+        invokePresenterToCallApiForCurrentWeather()
 
         //adding observer on database weather data
         presenter.getWeatherFromDatabase()
@@ -104,8 +104,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             )
     }
 
-    override fun invokePresenterToCallApi() {
-        presenter.callApiToGetWeather("mumbai")
+    override fun invokePresenterToCallApiForCurrentWeather() {
+        presenter.callApiToGetCurrentWeather("mumbai")
     }
 
     override fun onDestroy() {
