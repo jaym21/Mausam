@@ -6,8 +6,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class DataStoreManager(val context: Context) {
+class DataStoreManager(private val context: Context) {
 
     companion object {
         private val LATITUDE = stringPreferencesKey("LATITUDE")
@@ -27,5 +29,13 @@ class DataStoreManager(val context: Context) {
         }
     }
 
+    val latitude: Flow<String>
+        get() = context.dataStore.data.map {
+            it[LATITUDE] ?: ""
+        }
 
+    val longitude: Flow<String>
+        get() = context.dataStore.data.map {
+            it[LONGITUDE] ?: ""
+        }
 }
