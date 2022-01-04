@@ -108,6 +108,10 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         presenter.callApiToGetCurrentWeather("mumbai")
     }
 
+    override fun invokePresenterToCallApiForHourlyForecast() {
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

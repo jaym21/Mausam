@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.local.WeatherEntity
+import dev.jaym21.mausam.data.remote.models.responses.HourlyForecastResponse
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.utils.DisposableManager
 import io.reactivex.Flowable
@@ -30,8 +31,18 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
             )
     }
 
+    @SuppressLint("CheckResult")
     override fun callApiToGetHourlyForecast(latitude: String, longitude: String) {
+        api.getHourlyForecast(latitude, longitude)
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                { hourlyForecastResponse ->
 
+                },
+                { error ->
+                    Log.d("TAGYOYO", "callApiToGetHourlyForecast: $error")
+                }
+            )
     }
 
     override fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>> {
