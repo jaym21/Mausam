@@ -124,10 +124,14 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             when (response) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
+                    binding.tvTodayText.visibility = View.VISIBLE
+                    binding.llNextForecast.visibility = View.VISIBLE
                     hourlyForecastAdapter.submitList(response.data?.hourly)
                 }
                 is ApiResponse.Error -> {
                     binding.progressBar.visibility = View.GONE
+                    binding.tvTodayText.visibility = View.GONE
+                    binding.llNextForecast.visibility = View.GONE
                     Snackbar.make(binding.root, "${response.responseMessage}", Snackbar.LENGTH_SHORT).show()
                 }
                 is ApiResponse.Loading -> {
@@ -150,10 +154,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                 longitude = it
             }
         }
-            if (latitude != null && longitude != null)
+            if (latitude != null && longitude != null) {
                 presenter.callApiToGetHourlyForecast(latitude!!, longitude!!)
-            else
-                Snackbar.make(binding.root, "Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
+                binding.tvTodayText.visibility = View.GONE
+                binding.llNextForecast.visibility = View.GONE
+            }
 
     }
 

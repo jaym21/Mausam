@@ -135,7 +135,7 @@
             android:id="@+id/tvHumidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="24%"
+            tools:text="24%"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:fontFamily="@font/futura_medium" />
@@ -171,7 +171,7 @@
             android:id="@+id/tvWind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1.54 m/sec"
+            tools:text="1.54 m/sec"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:fontFamily="@font/futura_medium" />
@@ -187,6 +187,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvTodayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Today"
@@ -235,7 +236,6 @@
         app:layout_constraintTop_toBottomOf="@id/llNextForecast"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="invisible"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:paddingTop="5dp"
