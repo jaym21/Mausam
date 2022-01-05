@@ -4,14 +4,21 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.lifecycleScope
 import dev.jaym21.mausam.R
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.databinding.ActivityMainBinding
+import dev.jaym21.mausam.utils.ApiResponse
+import dev.jaym21.mausam.utils.DataStoreManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -20,6 +27,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     lateinit var presenter: MainActivityPresenter
+    private var latitude: String? = null
+    private var longitude: String? = null
     @Inject lateinit var api: WeatherAPI
     @Inject lateinit var database: WeatherDatabase
 
@@ -102,6 +111,15 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                     Snackbar.make(binding.root, "Could not get weather data, $error", Snackbar.LENGTH_SHORT).show()
                 }
             )
+
+        //adding observer on hourly forecast livedata
+        presenter.hourlyForecast.observe(this, Observer { response ->
+            when (response) {
+                is ApiResponse.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
+        })
     }
 
     override fun invokePresenterToCallApiForCurrentWeather() {
@@ -109,6 +127,18 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun invokePresenterToCallApiForHourlyForecast() {
+        val job = lifecycleScope.launch {
+            DataStoreManager(this@MainActivity).latitude.asLiveData().observe(this@MainActivity) {
+                latitude = it
+            }
+            DataStoreManager(this@MainActivity).longitude.asLiveData().observe(this@MainActivity) {
+                longitude = it
+            }
+        }
+            if (latitude != null && longitude != null)
+                presenter.callApiToGetHourlyForecast(latitude!!, longitude!!)
+            else
+                Snackbar.make(binding.root, "Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
 
     }
 
