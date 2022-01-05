@@ -8,13 +8,14 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.jaym21.mausam.R
 import dev.jaym21.mausam.adapters.HourlyForecastAdapter
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.databinding.ActivityMainBinding
+import dev.jaym21.mausam.presenter.MainActivityContract
+import dev.jaym21.mausam.presenter.MainActivityPresenter
 import dev.jaym21.mausam.utils.ApiResponse
 import dev.jaym21.mausam.utils.SharedPreferences
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -165,6 +166,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onDestroy() {
         super.onDestroy()
+        presenter.onActivityDestroy()
         _binding = null
     }
 }

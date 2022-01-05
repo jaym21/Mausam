@@ -1,4 +1,4 @@
-package dev.jaym21.mausam.ui
+package dev.jaym21.mausam.presenter
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -8,6 +8,7 @@ import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.local.WeatherEntity
 import dev.jaym21.mausam.data.remote.models.responses.HourlyForecastResponse
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
+import dev.jaym21.mausam.presenter.MainActivityContract
 import dev.jaym21.mausam.utils.ApiResponse
 import dev.jaym21.mausam.utils.DisposableManager
 import io.reactivex.Flowable
@@ -20,6 +21,7 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
 
     @SuppressLint("CheckResult")
     override fun callApiToGetCurrentWeather(cityName: String) {
+        DisposableManager.add(
         api.getWeatherForCity(cityName)
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -35,22 +37,24 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
                     Log.d("TAGYOYO", "callApiToGetWeather: $error")
                 }
             )
+        )
     }
 
     @SuppressLint("CheckResult")
     override fun callApiToGetHourlyForecast(latitude: String, longitude: String) {
         _hourlyForecast.postValue(ApiResponse.Loading())
-
-        api.getHourlyForecast(latitude, longitude)
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                { hourlyForecastResponse ->
-                    _hourlyForecast.postValue(ApiResponse.Success(hourlyForecastResponse))
-                },
-                { error ->
-                    _hourlyForecast.postValue(ApiResponse.Error("Could not get hourly forecast, $error"))
-                }
-            )
+        DisposableManager.add(
+            api.getHourlyForecast(latitude, longitude)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    { hourlyForecastResponse ->
+                        _hourlyForecast.postValue(ApiResponse.Success(hourlyForecastResponse))
+                    },
+                    { error ->
+                        _hourlyForecast.postValue(ApiResponse.Error("Could not get hourly forecast, $error"))
+                    }
+                )
+        )
     }
 
     override fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>> {

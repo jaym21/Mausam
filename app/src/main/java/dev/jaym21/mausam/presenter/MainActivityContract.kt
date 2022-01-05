@@ -1,4 +1,4 @@
-package dev.jaym21.mausam.ui
+package dev.jaym21.mausam.presenter
 
 import dev.jaym21.mausam.data.local.WeatherEntity
 import io.reactivex.Flowable
