@@ -15,7 +15,7 @@
         android:id="@+id/btnBack"
         android:layout_width="35sp"
         android:layout_height="35sp"
-        android:src="@drawable/ic_arrow_left"
+        android:src="@drawable/ic_back_arrow"
         app:tint="@color/white"/>
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Mumbai"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textColor="@color/text_light"
         android:layout_centerHorizontal="true" />
 
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next week"
-        android:textSize="22sp"
+        android:textSize="16sp"
         android:textColor="@color/text_light"
         android:layout_below="@id/btnBack"
         android:layout_marginTop="20dp"/>

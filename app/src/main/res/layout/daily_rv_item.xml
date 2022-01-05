@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="25/08"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/text_light"
         android:layout_alignParentStart="true"/>
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Monday"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/text_light"
         android:layout_toEndOf="@id/tvDateDaily"
         android:layout_toStartOf="@id/ivIconDaily"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="25"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textColor="@color/text_light"
         android:layout_alignParentEnd="true"/>
 
@@ -68,13 +68,13 @@
             android:layout_height="wrap_content"
             tools:text="6:00 AM"
             android:textColor="@color/text_light"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sunrise"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@color/text_light"/>
 
     </LinearLayout>
@@ -102,14 +102,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="24%"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/text_light"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Humidity"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@color/text_light"/>
 
     </LinearLayout>
@@ -134,15 +134,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="24%"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/text_light"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Wind Speed"
-            android:textSize="14sp"
-            android:textColor="@color/text_light1"/>
+            android:textSize="12sp"
+            android:textColor="@color/text_light"/>
 
     </LinearLayout>
 

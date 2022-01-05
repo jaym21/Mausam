@@ -1,5 +1,6 @@
 package dev.jaym21.mausam.ui
 
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import dev.jaym21.mausam.presenter.Next7DayForecastContract
 import dev.jaym21.mausam.presenter.Next7DayForecastPresenter
 import dev.jaym21.mausam.utils.ApiResponse
 import dev.jaym21.mausam.utils.SharedPreferences
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,6 +34,12 @@ class Next7DayForecastActivity : AppCompatActivity(), Next7DayForecastContract.V
         setContentView(binding.root)
 
         presenter = Next7DayForecastPresenter(api)
+
+        //getting the cityName
+        val cityName = getCityName(SharedPreferences.getCurrentLatitude(this)!!, SharedPreferences.getCurrentLongitude(this)!!)
+        if (cityName != null) {
+            binding.tvLocationDaily.text = cityName
+        }
 
         setUpRecyclerView()
 
@@ -70,6 +78,12 @@ class Next7DayForecastActivity : AppCompatActivity(), Next7DayForecastContract.V
             Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
             onBackPressed()
         }
+    }
+
+    private fun getCityName(latitude: String, longitude: String): String? {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val address = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+        return address[0].locality
     }
 
     private fun setUpRecyclerView() {
