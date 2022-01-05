@@ -10,7 +10,9 @@ import androidx.lifecycle.asLiveData
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import dev.jaym21.mausam.R
+import dev.jaym21.mausam.adapters.HourlyForecastAdapter
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.databinding.ActivityMainBinding
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     lateinit var presenter: MainActivityPresenter
+    private var hourlyForecastAdapter = HourlyForecastAdapter()
     private var latitude: String? = null
     private var longitude: String? = null
     @Inject lateinit var api: WeatherAPI
@@ -42,6 +45,10 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         presenter = MainActivityPresenter(api, database)
 
         invokePresenterToCallApiForCurrentWeather()
+
+        invokePresenterToCallApiForHourlyForecast()
+
+        setupRecyclerView()
 
         //adding observer on database weather data
         presenter.getWeatherFromDatabase()
@@ -117,6 +124,14 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             when (response) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
+                    hourlyForecastAdapter.submitList(response.data?.hourly)
+                }
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Snackbar.make(binding.root, "${response.responseMessage}", Snackbar.LENGTH_SHORT).show()
+                }
+                is ApiResponse.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
                 }
             }
         })
@@ -127,7 +142,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun invokePresenterToCallApiForHourlyForecast() {
-        val job = lifecycleScope.launch {
+        lifecycleScope.launch {
             DataStoreManager(this@MainActivity).latitude.asLiveData().observe(this@MainActivity) {
                 latitude = it
             }
@@ -140,6 +155,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             else
                 Snackbar.make(binding.root, "Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
 
+    }
+
+    private fun setupRecyclerView() {
+        binding.rvHourlyForecast.apply {
+            adapter = hourlyForecastAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity , LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     override fun onDestroy() {
