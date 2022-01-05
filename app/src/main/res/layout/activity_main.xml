@@ -50,7 +50,8 @@
                 android:layout_height="match_parent"
                 android:hint="Enter city"
                 android:textColor="@color/black"
-                android:textColorHint="#99000000"/>
+                android:textColorHint="#99000000"
+                android:fontFamily="@font/futura_medium"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,6 +88,7 @@
         app:layout_constraintTop_toBottomOf="@id/ivWeatherIcon"
         tools:text="25"
         android:textColor="@color/black"
+        android:fontFamily="@font/futura_medium"
         android:layout_marginTop="16dp"/>
 
     <TextView
@@ -95,6 +97,7 @@
         android:text="\u2103"
         android:textSize="18sp"
         android:textColor="@color/black"
+        android:fontFamily="@font/futura_medium"
         app:layout_constraintTop_toTopOf="@id/tvTemperature"
         app:layout_constraintLeft_toRightOf="@id/tvTemperature"
         android:layout_marginTop="10dp"/>
@@ -105,6 +108,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/black"
+        android:fontFamily="@font/futura_medium"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTemperature"
@@ -133,14 +137,16 @@
             android:layout_height="wrap_content"
             android:text="24%"
             android:textSize="18sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:fontFamily="@font/futura_medium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Humidity"
             android:textSize="16sp"
-            android:textColor="#B3000000" />
+            android:textColor="#B3000000"
+            android:fontFamily="@font/futura_medium" />
 
     </LinearLayout>
 
@@ -167,14 +173,16 @@
             android:layout_height="wrap_content"
             android:text="1.54 m/sec"
             android:textSize="18sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:fontFamily="@font/futura_medium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Wind"
             android:textSize="16sp"
-            android:textColor="#B3000000" />
+            android:textColor="#B3000000"
+            android:fontFamily="@font/futura_medium" />
 
     </LinearLayout>
 
@@ -184,9 +192,11 @@
         android:text="Today"
         android:textSize="20sp"
         android:textColor="@color/black"
+        android:fontFamily="@font/futura_medium"
         app:layout_constraintTop_toBottomOf="@id/llHumidity"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"/>
 
 
     <LinearLayout
@@ -196,7 +206,8 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/llHumidity"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="10dp">
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -204,7 +215,8 @@
             android:text="Next 7 Days"
             android:textSize="20sp"
             android:gravity="center"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:fontFamily="@font/futura_medium" />
 
         <ImageView
             android:layout_width="25dp"

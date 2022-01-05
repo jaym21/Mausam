@@ -6,7 +6,7 @@
     android:elevation="5dp"
     android:background="@drawable/hourly_item_bg"
     android:layout_marginEnd="10dp"
-    android:padding="16dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             tools:text="20/08"
             android:textColor="#B3000000"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/tvHour"
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             tools:text="9:00 AM"
             android:textColor="#B3000000"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"/>
 
         <ImageView
@@ -43,7 +45,8 @@
             tools:text="25"
             android:textSize="24sp"
             android:textColor="@color/black"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 
