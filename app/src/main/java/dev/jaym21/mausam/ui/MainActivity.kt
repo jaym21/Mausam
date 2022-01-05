@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.asLiveData
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.lifecycleScope
@@ -17,10 +16,10 @@ import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.databinding.ActivityMainBinding
 import dev.jaym21.mausam.utils.ApiResponse
-import dev.jaym21.mausam.utils.DataStoreManager
+import dev.jaym21.mausam.utils.SharedPreferences
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,8 +29,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private val binding get() = _binding!!
     lateinit var presenter: MainActivityPresenter
     private var hourlyForecastAdapter = HourlyForecastAdapter()
-    private var latitude: String? = null
-    private var longitude: String? = null
     @Inject lateinit var api: WeatherAPI
     @Inject lateinit var database: WeatherDatabase
 
@@ -132,6 +129,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                     binding.progressBar.visibility = View.GONE
                     binding.tvTodayText.visibility = View.GONE
                     binding.llNextForecast.visibility = View.GONE
+                    Log.d("TAGYOYO", "onCreate: ${response.responseMessage}")
                     Snackbar.make(binding.root, "${response.responseMessage}", Snackbar.LENGTH_SHORT).show()
                 }
                 is ApiResponse.Loading -> {
@@ -146,22 +144,16 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun invokePresenterToCallApiForHourlyForecast() {
-        lifecycleScope.launch {
-            DataStoreManager(this@MainActivity).latitude.asLiveData().observe(this@MainActivity) {
-                latitude = it
-            }
-            DataStoreManager(this@MainActivity).longitude.asLiveData().observe(this@MainActivity) {
-                longitude = it
-            }
-        }
-            if (latitude != null && longitude != null) {
-                presenter.callApiToGetHourlyForecast(latitude!!, longitude!!)
-            } else {
-                Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
-                binding.tvTodayText.visibility = View.GONE
-                binding.llNextForecast.visibility = View.GONE
-            }
+        val latitude = SharedPreferences.getCurrentLatitude(this)
+        val longitude = SharedPreferences.getCurrentLongitude(this)
 
+        if (!latitude.isNullOrBlank() && !longitude.isNullOrBlank()) {
+            presenter.callApiToGetHourlyForecast(latitude, longitude)
+        } else {
+            Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
+            binding.tvTodayText.visibility = View.GONE
+            binding.llNextForecast.visibility = View.GONE
+        }
     }
 
     private fun setupRecyclerView() {

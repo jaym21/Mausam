@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.*
 import dev.jaym21.mausam.utils.Constants
-import dev.jaym21.mausam.utils.DataStoreManager
+import dev.jaym21.mausam.utils.SharedPreferences
 import kotlinx.coroutines.launch
 
 class SplashActivity: AppCompatActivity() {
@@ -41,10 +40,8 @@ class SplashActivity: AppCompatActivity() {
                 fusedLocationClient.lastLocation.addOnCompleteListener {
                     val location = it.result
                     if (location != null) {
-                        lifecycleScope.launch {
-                            DataStoreManager(this@SplashActivity).saveLatitude(location.latitude.toString())
-                            DataStoreManager(this@SplashActivity).saveLongitude(location.longitude.toString())
-                        }
+                        SharedPreferences.setCurrentLatitude(this, location.latitude.toString())
+                        SharedPreferences.setCurrentLongitude(this, location.longitude.toString())
                         val intent = Intent(this , MainActivity::class.java)
                         startActivity(intent)
                         finish()

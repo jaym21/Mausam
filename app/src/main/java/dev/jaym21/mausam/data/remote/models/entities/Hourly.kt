@@ -13,25 +13,25 @@ data class Hourly(
     @Json(name = "feels_like")
     val feelsLike: Double?,
     @Json(name = "pressure")
-    val pressure: Int?,
+    val pressure: Double?,
     @Json(name = "humidity")
-    val humidity: Int?,
+    val humidity: Double?,
     @Json(name = "dew_point")
     val dewPoint: Double?,
     @Json(name = "uvi")
-    val uvi: Int?,
+    val uvi: Double?,
     @Json(name = "clouds")
-    val clouds: Int?,
+    val clouds: Double?,
     @Json(name = "visibility")
-    val visibility: Int?,
+    val visibility: Double?,
     @Json(name = "wind_speed")
     val windSpeed: Double?,
     @Json(name = "wind_deg")
-    val windDeg: Int?,
+    val windDeg: Double?,
     @Json(name = "wind_gust")
     val windGust: Double?,
     @Json(name = "weather")
     val weather: List<Weather>?,
     @Json(name = "pop")
-    val pop: Int?
+    val pop: Double?
 )
