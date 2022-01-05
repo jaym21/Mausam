@@ -7,6 +7,7 @@ interface Next7DayForecastContract {
     }
 
     interface Presenter {
-
+        fun callApiToGet7DayForecast(latitude: String, longitude: String)
+        fun onActivityDestroy()
     }
 }

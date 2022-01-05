@@ -19,7 +19,6 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
     private val _hourlyForecast: MutableLiveData<ApiResponse<HourlyForecastResponse>> = MutableLiveData()
     val hourlyForecast: LiveData<ApiResponse<HourlyForecastResponse>> = _hourlyForecast
 
-    @SuppressLint("CheckResult")
     override fun callApiToGetCurrentWeather(cityName: String) {
         DisposableManager.add(
         api.getWeatherForCity(cityName)
@@ -40,7 +39,6 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
         )
     }
 
-    @SuppressLint("CheckResult")
     override fun callApiToGetHourlyForecast(latitude: String, longitude: String) {
         _hourlyForecast.postValue(ApiResponse.Loading())
         DisposableManager.add(

@@ -47,7 +47,7 @@ interface WeatherAPI {
     ): Single<HourlyForecastResponse>
 
     @GET("onecall?")
-    suspend fun getDailyForecast (
+    fun getDailyForecast (
         @Query("lat")
         latitude: String,
         @Query("lon")
