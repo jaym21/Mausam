@@ -7,14 +7,14 @@ class DisposableManager {
 
     companion object {
 
-        private lateinit var compositeDisposable: CompositeDisposable
+        private var compositeDisposable: CompositeDisposable? = null
 
         //to provide singleton composite disposable
         private fun getCompositeDisposable(): CompositeDisposable {
-            if (compositeDisposable == null || compositeDisposable.isDisposed) {
+            if (compositeDisposable == null || compositeDisposable!!.isDisposed) {
                 compositeDisposable = CompositeDisposable()
             }
-            return compositeDisposable
+            return compositeDisposable!!
         }
 
         //adding a disposable to composite disposable

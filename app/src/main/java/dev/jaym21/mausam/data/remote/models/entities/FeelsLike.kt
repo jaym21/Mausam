@@ -13,5 +13,5 @@ data class FeelsLike(
     @Json(name = "eve")
     val eve: Double?,
     @Json(name = "morn")
-    val morn: Int?
+    val morn: Double?
 )

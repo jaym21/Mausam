@@ -1,6 +1,7 @@
 package dev.jaym21.mausam.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -47,6 +48,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         invokePresenterToCallApiForHourlyForecast()
 
         setupRecyclerView()
+
+        binding.llNextForecast.setOnClickListener {
+            val intent = Intent(this, Next7DayForecastActivity::class.java)
+            startActivity(intent)
+        }
 
         //adding observer on database weather data
         presenter.getWeatherFromDatabase()
