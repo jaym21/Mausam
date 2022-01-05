@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 class MainActivityPresenter (private val api: WeatherAPI, private val database: WeatherDatabase): MainActivityContract.Presenter {
 
     private val _hourlyForecast: MutableLiveData<ApiResponse<HourlyForecastResponse>> = MutableLiveData()
-    val hourlyForecastResponse: LiveData<ApiResponse<HourlyForecastResponse>> = _hourlyForecast
+    val hourlyForecast: LiveData<ApiResponse<HourlyForecastResponse>> = _hourlyForecast
 
     @SuppressLint("CheckResult")
     override fun callApiToGetCurrentWeather(cityName: String) {
