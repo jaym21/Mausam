@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Next7DayForecastActivity"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="@color/bg_color">
+
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="35sp"
+        android:layout_height="35sp"
+        android:src="@drawable/ic_arrow_left"
+        app:tint="@color/white"/>
+
+    <TextView
+        android:id="@+id/tvLocationDaily"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Mumbai"
+        android:textSize="22sp"
+        android:textColor="@color/text_light"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvNextWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next week"
+        android:textSize="22sp"
+        android:textColor="@color/text_light"
+        android:layout_below="@id/btnBack"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDailyForecast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/daily_rv_item"
+        android:layout_below="@id/tvNextWeek"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>

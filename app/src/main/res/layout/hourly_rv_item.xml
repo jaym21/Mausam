@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="20/08"
-            android:textColor="@color/text_light"
+            android:textColor="@color/text_dark"
             android:layout_gravity="center"
             android:layout_marginTop="10dp" />
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="9:00 AM"
-            android:textColor="@color/text_light"
+            android:textColor="@color/text_dark"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"/>
 

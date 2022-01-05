@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:text="Humidity"
             android:textSize="16sp"
-            android:textColor="@color/text_light"
+            android:textColor="@color/text_dark"
             android:fontFamily="@font/futura_medium" />
 
     </LinearLayout>
@@ -181,7 +181,7 @@
             android:layout_height="wrap_content"
             android:text="Wind"
             android:textSize="16sp"
-            android:textColor="@color/text_light"
+            android:textColor="@color/text_dark"
             android:fontFamily="@font/futura_medium" />
 
     </LinearLayout>
