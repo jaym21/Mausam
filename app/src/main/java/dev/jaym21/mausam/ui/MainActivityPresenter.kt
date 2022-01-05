@@ -2,6 +2,8 @@ package dev.jaym21.mausam.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.local.WeatherEntity
 import dev.jaym21.mausam.data.remote.models.responses.HourlyForecastResponse
@@ -11,6 +13,9 @@ import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 
 class MainActivityPresenter (private val api: WeatherAPI, private val database: WeatherDatabase): MainActivityContract.Presenter {
+
+    private val _hourlyForecast: MutableLiveData<HourlyForecastResponse> = MutableLiveData()
+    val hourlyForecastResponse: LiveData<HourlyForecastResponse> = _hourlyForecast
 
     @SuppressLint("CheckResult")
     override fun callApiToGetCurrentWeather(cityName: String) {
@@ -37,7 +42,7 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { hourlyForecastResponse ->
-
+                    _hourlyForecast.postValue(HourlyForecastResponse())
                 },
                 { error ->
                     Log.d("TAGYOYO", "callApiToGetHourlyForecast: $error")
