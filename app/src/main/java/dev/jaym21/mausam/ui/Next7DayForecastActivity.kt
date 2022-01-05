@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import dev.jaym21.mausam.adapters.DailyForecastAdapter
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
 import dev.jaym21.mausam.databinding.ActivityNext7DayForecastBinding
 import dev.jaym21.mausam.presenter.Next7DayForecastContract
@@ -20,6 +22,7 @@ class Next7DayForecastActivity : AppCompatActivity(), Next7DayForecastContract.V
 
     private var _binding: ActivityNext7DayForecastBinding? = null
     private val binding get() = _binding!!
+    private var dailyForecastAdapter = DailyForecastAdapter()
     private lateinit var presenter: Next7DayForecastPresenter
     @Inject lateinit var api: WeatherAPI
 
@@ -30,14 +33,20 @@ class Next7DayForecastActivity : AppCompatActivity(), Next7DayForecastContract.V
 
         presenter = Next7DayForecastPresenter(api)
 
+        setUpRecyclerView()
+
         invokePresenterToGetNext7DayForecast()
+
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
 
         //adding observer on daily forecast livedata
         presenter.dailyForecast.observe(this, Observer { response ->
             when (response) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Log.d("TAGYOYO", "onCreate: ${response.data}")
+                    dailyForecastAdapter.submitList(response.data?.daily)
                 }
                 is ApiResponse.Error -> {
                     binding.progressBar.visibility = View.GONE
@@ -60,6 +69,13 @@ class Next7DayForecastActivity : AppCompatActivity(), Next7DayForecastContract.V
         } else {
             Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
             onBackPressed()
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        binding.rvDailyForecast.apply {
+            adapter = dailyForecastAdapter
+            layoutManager = LinearLayoutManager(this@Next7DayForecastActivity, LinearLayoutManager.VERTICAL, false)
         }
     }
 

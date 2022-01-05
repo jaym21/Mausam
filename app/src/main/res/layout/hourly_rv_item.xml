@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             tools:text="20/08"
             android:textColor="@color/text_dark"
+            android:textSize="13sp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp" />
 
@@ -27,8 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="9:00 AM"
+            android:textSize="13sp"
             android:textColor="@color/text_dark"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             android:layout_gravity="center"/>
 
         <ImageView
@@ -36,14 +38,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             tools:src="@drawable/ic_clouds"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"/>
 
         <TextView
             android:id="@+id/tvTempHourly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="25"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_marginTop="10dp" />

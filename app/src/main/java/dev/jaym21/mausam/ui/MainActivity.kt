@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                     }
                 },
                 { error ->
-                    Snackbar.make(binding.root, "Could not get weather data, $error", Snackbar.LENGTH_SHORT).show()
+                    Log.d("TAGYOYO", "onCreate: ${error.localizedMessage}")
                 }
             )
 
