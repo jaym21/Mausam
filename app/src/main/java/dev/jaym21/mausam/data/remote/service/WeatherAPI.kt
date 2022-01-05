@@ -1,6 +1,7 @@
 package dev.jaym21.mausam.data.remote.service
 
 import dev.jaym21.mausam.data.remote.models.responses.CityResponse
+import dev.jaym21.mausam.data.remote.models.responses.DailyForecastResponse
 import dev.jaym21.mausam.data.remote.models.responses.HourlyForecastResponse
 import dev.jaym21.mausam.utils.Constants
 import io.reactivex.Single
@@ -44,4 +45,18 @@ interface WeatherAPI {
         @Query("appid")
         apiKey: String = "e8831806d35a5163760fe42bc92a80db"
     ): Single<HourlyForecastResponse>
+
+    @GET("onecall?")
+    suspend fun getDailyForecast (
+        @Query("lat")
+        latitude: String,
+        @Query("lon")
+        longitude: String,
+        @Query("exclude")
+        exclude: String = "current,minutely,hourly,alerts",
+        @Query("units")
+        unit: String = "metric",
+        @Query("appid")
+        apiKey: String = "e8831806d35a5163760fe42bc92a80db"
+    ): Single<DailyForecastResponse>
 }
