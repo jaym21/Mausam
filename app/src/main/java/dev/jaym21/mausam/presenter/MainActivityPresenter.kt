@@ -1,14 +1,13 @@
 package dev.jaym21.mausam.presenter
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dev.jaym21.mausam.data.local.WeatherDatabase
 import dev.jaym21.mausam.data.local.WeatherEntity
+import dev.jaym21.mausam.data.remote.models.responses.CityResponse
 import dev.jaym21.mausam.data.remote.models.responses.HourlyForecastResponse
 import dev.jaym21.mausam.data.remote.service.WeatherAPI
-import dev.jaym21.mausam.presenter.MainActivityContract
 import dev.jaym21.mausam.utils.ApiResponse
 import dev.jaym21.mausam.utils.DisposableManager
 import io.reactivex.Flowable
@@ -18,10 +17,12 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
 
     private val _hourlyForecast: MutableLiveData<ApiResponse<HourlyForecastResponse>> = MutableLiveData()
     val hourlyForecast: LiveData<ApiResponse<HourlyForecastResponse>> = _hourlyForecast
+    private val _cityResponse: MutableLiveData<ApiResponse<CityResponse>> = MutableLiveData()
+    val cityResponse: LiveData<ApiResponse<CityResponse>> = _cityResponse
 
-    override fun callApiToGetCurrentWeather(cityName: String) {
+    override fun callApiToGetCurrentWeatherUsingLatLng(latitude: String, longitude: String) {
         DisposableManager.add(
-        api.getWeatherForCity(cityName)
+        api.getWeatherByLatLng(latitude, longitude)
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { cityResponse ->
@@ -36,6 +37,22 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
                     Log.d("TAGYOYO", "callApiToGetWeather: $error")
                 }
             )
+        )
+    }
+
+    override fun callApiToGetWeatherUsingCityName(cityName: String) {
+        _cityResponse.postValue(ApiResponse.Loading())
+        DisposableManager.add(
+            api.getWeatherForCity(cityName)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    { cityResponse ->
+                        _cityResponse.postValue(ApiResponse.Success(cityResponse))
+                    },
+                    { error ->
+                        _cityResponse.postValue(ApiResponse.Error("Could not get weather using city, $error"))
+                    }
+                )
         )
     }
 

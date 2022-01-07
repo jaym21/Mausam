@@ -2,6 +2,7 @@ package dev.jaym21.mausam.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,7 @@ import dev.jaym21.mausam.utils.SharedPreferences
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     @Inject lateinit var api: WeatherAPI
     @Inject lateinit var database: WeatherDatabase
 
+
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +48,18 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
         invokePresenterToCallApiForCurrentWeather()
 
+        //getting hourly forecast
         invokePresenterToCallApiForHourlyForecast()
 
-        setupRecyclerView()
+        setUpRecyclerView()
 
         binding.llNextForecast.setOnClickListener {
             val intent = Intent(this, Next7DayForecastActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.ivSearch.setOnClickListener {
+            presenter.callApiToGetWeatherUsingCityName(binding.etCityName.text.toString())
         }
 
         //adding observer on database weather data
@@ -60,7 +68,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { weathers ->
-                    Log.d("TAGYOYO", "onCreate: $weathers")
                     binding.tvLocation.text = weathers[0].name
                     binding.tvTemperature.text = weathers[0].temp.toString()
                     binding.tvDes.text = weathers[0].main
@@ -144,10 +151,92 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                 }
             }
         })
+
+        //adding observer to get weather from searched city name
+        presenter.cityResponse.observe(this, Observer { response ->
+            when (response) {
+                is ApiResponse.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.tvLocation.text = response.data?.name
+                    binding.tvTemperature.text = response.data?.main?.temp.toString()
+                    binding.tvDes.text = response.data?.weather?.get(0)?.main
+                    binding.tvHumidity.text = response.data?.main?.humidity.toString()
+                    binding.tvWind.text = response.data?.wind?.speed.toString()
+
+                    when(response.data?.weather?.get(0)?.main?.lowercase()) {
+                        "clear" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_sun)
+                            binding.clMain.setBackgroundResource(R.drawable.clear_bg)
+                        }
+                        "rain" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
+                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
+                        }
+                        "drizzle" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
+                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
+                        }
+                        "thunderstorm" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_storm)
+                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
+                        }
+                        "snow" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_snowfall)
+                            binding.clMain.setBackgroundResource(R.drawable.snow_bg)
+                        }
+                        "clouds" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_clouds)
+                            binding.clMain.setBackgroundResource(R.drawable.clouds_bg)
+                        }
+                        "fog" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_foggy_day)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                        "mist" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                        "smoke" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
+                        }
+                        "dust" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
+                        }
+                        "tornado" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_tornado)
+                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
+                        }
+                        "haze" -> {
+                            binding.ivWeatherIcon.setImageResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                    }
+
+
+                }
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                }
+                is ApiResponse.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     override fun invokePresenterToCallApiForCurrentWeather() {
-        presenter.callApiToGetCurrentWeather("mumbai")
+        val latitude = SharedPreferences.getCurrentLatitude(this)
+        val longitude = SharedPreferences.getCurrentLongitude(this)
+
+        if (!latitude.isNullOrBlank() && !longitude.isNullOrBlank()) {
+            presenter.callApiToGetCurrentWeatherUsingLatLng(latitude, longitude)
+        } else {
+            Snackbar.make(binding.root,"Current location latitude longitude not found", Snackbar.LENGTH_SHORT).show()
+            binding.tvTodayText.visibility = View.GONE
+            binding.llNextForecast.visibility = View.GONE
+        }
     }
 
     override fun invokePresenterToCallApiForHourlyForecast() {
@@ -163,7 +252,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
-    private fun setupRecyclerView() {
+    private fun getCityName(latitude: String, longitude: String): String {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val address = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+        return address[0].locality
+    }
+
+    private fun setUpRecyclerView() {
         binding.rvHourlyForecast.apply {
             adapter = hourlyForecastAdapter
             layoutManager = LinearLayoutManager(this@MainActivity , LinearLayoutManager.HORIZONTAL, false)

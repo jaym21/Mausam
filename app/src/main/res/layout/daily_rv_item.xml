@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:text="Sunrise"
             android:textSize="12sp"
-            android:textColor="@color/text_light"/>
+            android:textColor="@color/text_light1"/>
 
     </LinearLayout>
 
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:text="Humidity"
             android:textSize="12sp"
-            android:textColor="@color/text_light"/>
+            android:textColor="@color/text_light1"/>
 
     </LinearLayout>
 
@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:text="Wind Speed"
             android:textSize="12sp"
-            android:textColor="@color/text_light"/>
+            android:textColor="@color/text_light1"/>
 
     </LinearLayout>
 

@@ -11,7 +11,8 @@ interface MainActivityContract {
     }
 
     interface Presenter {
-        fun callApiToGetCurrentWeather(cityName: String)
+        fun callApiToGetCurrentWeatherUsingLatLng(latitude: String, longitude: String)
+        fun callApiToGetWeatherUsingCityName(cityName: String)
         fun callApiToGetHourlyForecast(latitude: String, longitude: String)
         fun getWeatherFromDatabase(): Flowable<List<WeatherEntity>>
         fun onActivityDestroy()
