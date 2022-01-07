@@ -1,12 +1,16 @@
 package dev.jaym21.mausam.ui
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +64,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
         binding.ivSearch.setOnClickListener {
             presenter.callApiToGetWeatherUsingCityName(binding.etCityName.text.toString())
+            hideKeyboard(binding.root)
         }
 
         //adding observer on database weather data
@@ -252,17 +257,16 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
-    private fun getCityName(latitude: String, longitude: String): String {
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val address = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
-        return address[0].locality
-    }
-
     private fun setUpRecyclerView() {
         binding.rvHourlyForecast.apply {
             adapter = hourlyForecastAdapter
             layoutManager = LinearLayoutManager(this@MainActivity , LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroy() {
