@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     @Inject lateinit var database: WeatherDatabase
 
 
-    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -67,73 +66,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             hideKeyboard(binding.root)
         }
 
-        //adding observer on database weather data
-        presenter.getWeatherFromDatabase()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { weathers ->
-                    binding.tvLocation.text = weathers[0].name
-                    binding.tvTemperature.text = weathers[0].temp.toString()
-                    binding.tvDes.text = weathers[0].main
-                    binding.tvHumidity.text = weathers[0].humidity.toString()
-                    binding.tvWind.text = weathers[0].speed.toString()
-
-                    when(weathers[0].main?.lowercase()) {
-                        "clear" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_sun)
-                            binding.clMain.setBackgroundResource(R.drawable.clear_bg)
-                        }
-                        "rain" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
-                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
-                        }
-                        "drizzle" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
-                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
-                        }
-                        "thunderstorm" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_storm)
-                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
-                        }
-                        "snow" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_snowfall)
-                            binding.clMain.setBackgroundResource(R.drawable.snow_bg)
-                        }
-                        "clouds" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_clouds)
-                            binding.clMain.setBackgroundResource(R.drawable.clouds_bg)
-                        }
-                        "fog" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_foggy_day)
-                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
-                        }
-                        "mist" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
-                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
-                        }
-                        "smoke" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
-                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
-                        }
-                        "dust" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
-                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
-                        }
-                        "tornado" -> {
-                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_tornado)
-                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
-                        }
-                        "haze" -> {
-                            binding.ivWeatherIcon.setImageResource(R.drawable.ic_mist)
-                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
-                        }
-                    }
-                },
-                { error ->
-                    Log.d("TAGYOYO", "onCreate: ${error.localizedMessage}")
-                }
-            )
+        getCurrentWeatherFromDatabase()
 
         //adding observer on hourly forecast livedata
         presenter.hourlyForecast.observe(this, Observer { response ->
@@ -234,7 +167,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     override fun invokePresenterToCallApiForCurrentWeather() {
         val latitude = SharedPreferences.getCurrentLatitude(this)
         val longitude = SharedPreferences.getCurrentLongitude(this)
-
+        Log.d("TAGYOYO", "invokePresenterToCallApiForCurrentWeather: $latitude $longitude")
         if (!latitude.isNullOrBlank() && !longitude.isNullOrBlank()) {
             presenter.callApiToGetCurrentWeatherUsingLatLng(latitude, longitude)
         } else {
@@ -255,6 +188,82 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             binding.tvTodayText.visibility = View.GONE
             binding.llNextForecast.visibility = View.GONE
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun getCurrentWeatherFromDatabase() {
+        //adding observer on database weather data
+        presenter.getWeatherFromDatabase()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { weathers ->
+                    binding.tvLocation.text = weathers[0].name
+                    binding.tvTemperature.text = weathers[0].temp.toString()
+                    binding.tvDes.text = weathers[0].main
+                    binding.tvHumidity.text = weathers[0].humidity.toString()
+                    binding.tvWind.text = weathers[0].speed.toString()
+
+                    when(weathers[0].main?.lowercase()) {
+                        "clear" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_sun)
+                            binding.clMain.setBackgroundResource(R.drawable.clear_bg)
+                        }
+                        "rain" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
+                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
+                        }
+                        "drizzle" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_rain)
+                            binding.clMain.setBackgroundResource(R.drawable.rain_bg)
+                        }
+                        "thunderstorm" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_storm)
+                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
+                        }
+                        "snow" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_snowfall)
+                            binding.clMain.setBackgroundResource(R.drawable.snow_bg)
+                        }
+                        "clouds" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_clouds)
+                            binding.clMain.setBackgroundResource(R.drawable.clouds_bg)
+                        }
+                        "fog" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_foggy_day)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                        "mist" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                        "smoke" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
+                        }
+                        "dust" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.smoke_bg)
+                        }
+                        "tornado" -> {
+                            binding.ivWeatherIcon.setBackgroundResource(R.drawable.ic_tornado)
+                            binding.clMain.setBackgroundResource(R.drawable.thunderstorm_bg)
+                        }
+                        "haze" -> {
+                            binding.ivWeatherIcon.setImageResource(R.drawable.ic_mist)
+                            binding.clMain.setBackgroundResource(R.drawable.fog_bg)
+                        }
+                    }
+                },
+                { error ->
+                    Log.d("TAGYOYO", "DATABASE: ${error.localizedMessage}")
+                }
+            )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getCurrentWeatherFromDatabase()
     }
 
     private fun setUpRecyclerView() {

@@ -29,6 +29,7 @@ class MainActivityPresenter (private val api: WeatherAPI, private val database: 
                     val weather = WeatherEntity(0, cityResponse.coord?.lat, cityResponse.coord?.lat, cityResponse.name, cityResponse.main?.temp,
                         cityResponse.weather?.get(0)?.main, cityResponse.main?.humidity, cityResponse.wind?.speed
                     )
+                    Log.d("TAGYOYO", "callApiToGetCurrentWeatherUsingLatLng: $weather")
                     //caching weather data to use in case of no network
                     database.getWeatherDAO().deleteAllWeather()
                     database.getWeatherDAO().insertWeather(weather)
